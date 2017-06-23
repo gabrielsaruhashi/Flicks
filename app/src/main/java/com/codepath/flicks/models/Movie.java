@@ -2,19 +2,24 @@ package com.codepath.flicks.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 /**
  * Created by gabesaruhashi on 6/22/17.
  */
 
+@Parcel
 public class Movie {
 
     // values from API
+    Double voteAverage;
+    public String title;
+    public String overview;
+    public String posterPath; // only the path
+    public String backdropPath;
 
-    private String title;
-    private String overview;
-    private String posterPath; // only the path
-    private String backdropPath;
+    // no-arg, empty constructor required for Parceler
+    public Movie() {}
 
     // Initialize from JSON data
     public Movie(JSONObject object) throws JSONException {
@@ -22,6 +27,11 @@ public class Movie {
         overview = object.getString("overview");
         posterPath = object.getString("poster_path");
         backdropPath = object.getString("backdrop_path");
+        voteAverage = object.getDouble("vote_average");
+    }
+
+    public Double getVoteAverage() {
+        return voteAverage;
     }
 
     public String getTitle() {
