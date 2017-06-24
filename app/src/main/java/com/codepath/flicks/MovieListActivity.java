@@ -53,6 +53,8 @@ public class MovieListActivity extends AppCompatActivity {
     // image config
     Config config;
 
+
+
     // youtube support
     MovieDetailsActivity movieDetails;
 

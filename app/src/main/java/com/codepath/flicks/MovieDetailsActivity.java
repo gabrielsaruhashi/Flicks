@@ -1,6 +1,5 @@
 package com.codepath.flicks;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.codepath.flicks.models.Config;
 import com.codepath.flicks.models.Movie;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -23,6 +24,7 @@ import org.parceler.Parcels;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 import static com.codepath.flicks.MovieListActivity.API_BASE_URL;
 import static com.codepath.flicks.MovieListActivity.API_KEY_PARAM;
@@ -48,7 +50,15 @@ public class MovieDetailsActivity extends AppCompatActivity {
     // youtube video id, if exists
     String videoId;
 
-    Context context;
+    Config config;
+
+    public Config getConfig() {
+        return config;
+    }
+
+    public void setConfig(Config config) {
+        this.config = config;
+    }
 
     Integer movieId;
 
@@ -65,6 +75,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         // unwrap the movie passed in via intent, using its simple name as a key
         movie = (Movie) Parcels.unwrap(getIntent().getParcelableExtra(Movie.class.getSimpleName()));
+        config = (Config) Parcels.unwrap(getIntent().getParcelableExtra(Config.class.getSimpleName()));
+
         Log.d("MovieDetailsActivity", String.format("Showing details for '%s'", movie.getTitle()));
 
         // set the title and overview
@@ -82,9 +94,19 @@ public class MovieDetailsActivity extends AppCompatActivity {
         // set up ivTrailer
         ivTrailer = (ImageView) findViewById(R.id.ivTrailer);
 
+        // load image using glide
+        Glide.with(MovieDetailsActivity.this)
+                .load(config.getImageUrl(config.getPosterSize(), movie.getPosterPath()))
+
+                .bitmapTransform(new RoundedCornersTransformation(MovieDetailsActivity.this, 10, 0))
+                .placeholder(R.drawable.flicks_movie_placeholder)
+                .error(R.drawable.flicks_movie_placeholder)
+                .into(ivTrailer);
+
         // get youtube video Id
         getYoutubeVideo(movieId);
 
+        // set up listener for video click
         ivTrailer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
