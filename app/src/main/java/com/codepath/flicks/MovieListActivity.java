@@ -53,6 +53,8 @@ public class MovieListActivity extends AppCompatActivity {
     // image config
     Config config;
 
+    // youtube support
+    MovieDetailsActivity movieDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +114,8 @@ public class MovieListActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     logError("Failed to parse now playing", e, true);
                 }
+
+
             }
 
             @Override
@@ -150,6 +154,9 @@ public class MovieListActivity extends AppCompatActivity {
 
                     // get movies playing
                     getNowPlaying();
+
+
+
                 } catch (JSONException e) {
                     logError("Failed parsing configuration", e, true);
                 }
@@ -167,6 +174,10 @@ public class MovieListActivity extends AppCompatActivity {
 
     }
 
+
+
+
+
     // handle erros, log and alert user
     private void logError(String message, Throwable error, boolean alertUser) {
         // always log the error
@@ -178,5 +189,9 @@ public class MovieListActivity extends AppCompatActivity {
 
         }
     }
+
+
+
+
 
 }
